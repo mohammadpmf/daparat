@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% for car in cars %}
+        <p>برند: {{ car.brand }}</p>
+        <p>رنگ: {{ car.color }}</p>
+        <p>مدل: {{ car.model }}</p>
+        <p>سال ساخت: {{ car.date.year }}</p>
+        <p>قیمت: {{ car.price }}</p>
+        <p>کشور سازنده: {{ car.country }}</p>
+        <p>شتاب ۰ تا ۱۰۰: {{ car.accelerate }}</p>
+        <p>نوع دنده: {{ car.get_gear_type_display }}</p>
+        <h5>زمان ایجاد در دیتابیس: {{ car.datetime_created }}</h5>
+        <h5>آخرین زمان ویرایش در دیتابیس: {{ car.datetime_modified }}</h5>
+        <hr>
+    {% endfor %}
+</body>
+</html>
