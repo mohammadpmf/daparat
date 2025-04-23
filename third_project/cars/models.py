@@ -1,6 +1,7 @@
 from django.db import models
 
-
+class User():
+    1
 class Car(models.Model):
     GEAR_TYPE_CHOICES = (
         ("automat", "اتوماتیک"),
