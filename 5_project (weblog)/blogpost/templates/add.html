@@ -5,7 +5,8 @@
 {% block content %}
 <div class="col-8 mx-3">
     <div class="container mt-5 p-4 shadow-lg">
-        <form>
+        <form action="" method="post">
+            {% csrf_token %}
             <div class="form-row">
                 <div class="form-group col-md-5">
                     <label for="name">عنوان پست</label>

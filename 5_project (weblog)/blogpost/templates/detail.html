@@ -15,23 +15,23 @@
         <h6 class="text-muted small">🧡{{ post.likes }}</h6>
     </div>
     <div class="container mt-5 p-4 shadow">
-        <h4 class="mt-4">فلانی گفته:</h4>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi doloribus facere, eaque
-            reprehenderit, voluptatem consectetur fugiat ad vel labore rem voluptates, quis quo ipsum
-            soluta. Soluta dolore fuga eos ducimus.</p>
-        <hr>
-        <h4 class="mt-4">فلانی گفته:</h4>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi doloribus facere, eaque
-            reprehenderit, voluptatem consectetur fugiat ad vel labore rem voluptates, quis quo ipsum
-            soluta. Soluta dolore fuga eos ducimus.</p>
-        <hr>
-        <h4 class="mt-4">فلانی گفته:</h4>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi doloribus facere, eaque
-            reprehenderit, voluptatem consectetur fugiat ad vel labore rem voluptates, quis quo ipsum
-            soluta. Soluta dolore fuga eos ducimus.</p>
-    </div>
+        {% if comments %}
+        {% for comment in comments %}
+            {% if comment.hide_name %}
+                <h4 class="mt-4">شخص ناشناسی گفته:</h4>
+            {% else %}
+                <h4 class="mt-4"> {{ comment.name }} گفته:</h4>
+            {% endif %}
+            <p>{{ comment.comment }}</p>
+            <hr>
+        {% endfor %}
+        {% else %}
+            <h4 class="mt-4">اولین نفری باشید که برای این پست کامنت میگذارید.</h4>
+        {% endif %}
+        </div>
     <div class="container mt-5 p-4 shadow-lg">
-        <form>
+        <form action="" method="post">
+            {% csrf_token %}
             <div class="form-row">
                 <div class="form-group col-md-5">
                     <label for="name">نام</label>
@@ -64,7 +64,7 @@
                 <div class="form-group col-md-2">
                     <label for="zipcode">کد پستی</label>
                     <input type="text" class="form-control" id="zipcode" name="zipcode"
-                        placeholder="11111-11111" min="11" max="11" pattern="[0-9]{5}-[0-9]{5}">
+                        placeholder="1111111111" min="10" max="10" pattern="[0-9]{10}">
                 </div>
             </div>
             <div class="form-group">
@@ -75,6 +75,9 @@
                         نام من در سایت نمایش داده نشود و با نام ناشناس نظر من ثبت شود
                     </label>
                 </div>
+            </div>
+            <div class="form-group">
+                <textarea class="w-100 form-control mt-3" rows='6' name="text" id="text" required></textarea>
             </div>
             <button type="submit" class="btn btn-outline-success mt-4 me-4">ارسال نظر</button>
         </form>
