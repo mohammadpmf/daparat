@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 
 from .models import BlogPost, Comment
+from .forms import BlogPostCommentForm
 
 
 def home(request):
@@ -20,7 +21,7 @@ def add(request):
         p = BlogPost.objects.create(
             title=name,
             description=description,
-            author = user,
+            author=user,
         )
         print(p)
     elif request.method == "GET":
@@ -32,7 +33,7 @@ def detail(request, pk):
     # post = BlogPost.objects.get(pk=pk)
     post = get_object_or_404(BlogPost, pk=pk)
     comments = Comment.objects.filter(post=post)
-    if request.method=="POST":
+    if request.method == "POST":
         name = request.POST.get("name")
         email = request.POST.get("email", None)
         address = request.POST.get("address", "")
@@ -51,9 +52,24 @@ def detail(request, pk):
             zip_code=zip_code,
             hide_name=hide_name,
             comment=text,
-            post=post
+            post=post,
         )
     context = {"post": post, "comments": comments}
+    return render(request, "detail.html", context)
+
+
+def detail(request, pk):
+    post = get_object_or_404(BlogPost, pk=pk)
+    comments = Comment.objects.filter(post=post)
+    form = BlogPostCommentForm()
+    if request.method == "POST":
+        form = BlogPostCommentForm(request.POST)
+        if form.is_valid():
+            form = form.save(commit=False)
+            form.post = post
+            form.save()
+            form = BlogPostCommentForm()
+    context = {"post": post, "comments": comments, "form": form}
     return render(request, "detail.html", context)
 
 

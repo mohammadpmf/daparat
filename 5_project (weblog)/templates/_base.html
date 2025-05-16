@@ -31,21 +31,27 @@
                     <a class="nav-link" href="{% url 'recent_posts' %}">۵ پست آخر</a>
                 </li>
                 {% if user.is_authenticated %}
-                <li class="nav-item">
-                    <form method="post" action="{% url 'logout' %}">
-                        {% csrf_token %}
-                        <button class="nav-link" type="submit">
-                            خوش آمدی {{ user }} | <span class="text-primary">خروج</span>
-                        </button>
-                    </form>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'password_change' %}"><span class="text-primary">تغییر رمز عبور</span></a>
-                </li>
+                    <li class="nav-item">
+                        <form method="post" action="{% url 'logout' %}">
+                            {% csrf_token %}
+                            <button class="nav-link" type="submit">
+                                خوش آمدی {{ user }} | <span class="text-primary">خروج</span>
+                            </button>
+                        </form>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'password_change' %}"><span class="text-primary">تغییر رمز عبور</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'change_user_info' %}"><span class="text-primary">اطلاعات کاربری خود را تغییر دهید</span></a>
+                    </li>
                 {% else %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'login' %}"><span class="text-primary">وارد شوید</span></a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}"><span class="text-primary">وارد شوید</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'signup' %}"><span class="text-primary">حساب کاربری بسازید</span></a>
+                    </li>
                 {% endif %}
             </ul>
         </div>

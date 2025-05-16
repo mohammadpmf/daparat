@@ -38,7 +38,12 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 
-    # my apps
+    #  third party apps
+    "crispy_forms",
+    "crispy_bootstrap5",
+
+    #  my apps
+    "accounts",
     "blogpost",
 ]
 
@@ -128,12 +133,18 @@ LOGIN_REDIRECT_URL = "home"
 LOGOUT_REDIRECT_URL = "home"
 
 
-########################     EMAIL     ########################
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+########################     EMAIL         ########################
+# EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 465
 EMAIL_USE_SSL = True
 EMAIL_HOST_USER = "shookooljooni254@gmail.com"
 EMAIL_HOST_PASSWORD = "your_app_password_here"
 ########################     END EMAIL     ########################
+
+
+########################     CRISPY FORMS         ########################
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
+########################     END CRISPY FORMS     ########################
