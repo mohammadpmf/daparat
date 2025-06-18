@@ -20,12 +20,14 @@ class BlogPostAdmin(admin.ModelAdmin):
         "author",
     ]
 
+
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
     list_display = [
         "name",
         "hide_name",
         "post",
+        "state",
         "datetime_created",
         "datetime_modified",
     ]
@@ -35,4 +37,7 @@ class CommentAdmin(admin.ModelAdmin):
         "post",
         "datetime_created",
         "datetime_modified",
+    ]
+    list_editable = [
+        "state",
     ]

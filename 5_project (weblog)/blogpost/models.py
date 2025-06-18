@@ -19,14 +19,23 @@ class BlogPost(models.Model):
     
 
 class Comment(models.Model):
-    name = models.CharField(max_length=255)
-    email = models.EmailField(null=True, blank=True)
-    address = models.TextField(blank=True)
-    city = models.CharField(max_length=255, blank=True)
-    province = models.CharField(max_length=255, blank=True)
-    zip_code = models.CharField(max_length=11, blank=True)
-    hide_name = models.BooleanField(default=True)
-    comment = models.TextField()
-    post = models.ForeignKey(to=BlogPost, on_delete=models.CASCADE)
-    datetime_created = models.DateTimeField(auto_now_add=True)
-    datetime_modified = models.DateTimeField(auto_now=True)
+    STATE_CHOICES_APPROVED = "a"
+    STATE_CHOICES_REJECTED = "r"
+    STATE_CHOICES_PENDING = "p"
+    STATE_CHOICES = (
+        (STATE_CHOICES_APPROVED, "تایید شده"),
+        (STATE_CHOICES_REJECTED, "رد شده"),
+        (STATE_CHOICES_PENDING, "در انتظار تایید"),
+    )
+    name = models.CharField(max_length=255, verbose_name="نام")
+    email = models.EmailField(null=True, blank=True, verbose_name="ایمیل")
+    address = models.TextField(blank=True, verbose_name="آدرس")
+    city = models.CharField(max_length=255, blank=True, verbose_name="شهر")
+    province = models.CharField(max_length=255, blank=True, verbose_name="استان")
+    zip_code = models.CharField(max_length=11, blank=True, verbose_name="کد پستی")
+    hide_name = models.BooleanField(default=True, verbose_name="مخفی کردن نام")
+    comment = models.TextField(verbose_name="نظر")
+    post = models.ForeignKey(to=BlogPost, on_delete=models.CASCADE, verbose_name="پست", related_name="comments")
+    datetime_created = models.DateTimeField(auto_now_add=True, verbose_name="زمان ایجاد")
+    datetime_modified = models.DateTimeField(auto_now=True, verbose_name="زمان آخرین ویرایش")
+    state = models.CharField(max_length=1, choices=STATE_CHOICES, default=STATE_CHOICES_PENDING, verbose_name="وضعیت کامنت")

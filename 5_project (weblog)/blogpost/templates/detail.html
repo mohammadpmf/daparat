@@ -15,6 +15,10 @@
         <h6 class="text-muted small">تاریخ ایجاد: {{ post.datetime_created }}</h6>
         <h6 class="text-muted small">تاریخ آخرین ویرایش:  {{ post.datetime_modified }}</h6>
         <h6 class="text-muted small">🧡{{ post.likes }}</h6>
+        {% if user == post.author %}
+            <a class="btn btn-outline-warning m-3" href="{% url 'update' post.pk %}">ویرایش پست</a>
+            <a class="btn btn-outline-danger m-3" href="{% url 'delete' post.pk %}">حذف پست</a>
+        {% endif %}
     </div>
     <div class="container mt-5 p-4 shadow">
         {% if comments %}
