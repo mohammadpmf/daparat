@@ -8,15 +8,23 @@ class BlogPost(models.Model):
     description = models.TextField()
     datetime_created = models.DateTimeField(auto_now_add=True)
     datetime_modified = models.DateTimeField(auto_now=True)
-    likes = models.PositiveIntegerField(default=0)
-    author = models.ForeignKey(to=get_user_model(), on_delete=models.CASCADE)
+    author = models.ForeignKey(to=get_user_model(), on_delete=models.CASCADE, related_name="blogposts")
+    likes = models.ManyToManyField(to=get_user_model(), related_name="blogpost_likes", blank=True)
 
     def get_absolute_url(self):
         return reverse("detail", kwargs={"pk": self.pk})
 
     def __str__(self):
         return f"{self.title} {self.description[:20]}"
-    
+
+
+# class BlogPostLikes(models.Model):
+#     post = models.ForeignKey(to=BlogPost, on_delete=models.CASCADE)
+#     user = models.ForeignKey(to=get_user_model(), on_delete=models.CASCADE)
+
+#     class Meta:
+#         unique_together = ("post", "user")
+
 
 class Comment(models.Model):
     STATE_CHOICES_APPROVED = "a"

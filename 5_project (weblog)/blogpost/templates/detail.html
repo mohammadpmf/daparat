@@ -14,7 +14,24 @@
         <h6 class="text-muted small">نویسنده: {{ post.author }}</h6>
         <h6 class="text-muted small">تاریخ ایجاد: {{ post.datetime_created }}</h6>
         <h6 class="text-muted small">تاریخ آخرین ویرایش:  {{ post.datetime_modified }}</h6>
-        <h6 class="text-muted small">🧡{{ post.likes }}</h6>
+        {% if user.is_authenticated %}
+            <form action="" method="post">
+                {% csrf_token %}
+                <h6 class="text-muted small">
+                    {% if user in post.likes.all %}
+                        <button class="btn btn-success" type="submit">
+                    {% else %}
+                        <button class="btn btn-outline-success" type="submit">
+                    {% endif %}
+                        🧡 {{ post.likes.all.count }}
+                    </button>
+                </h6>
+            </form>
+        {% else %}
+            <h6 class="text-muted small">
+                🧡 {{ post.likes.all.count }}
+            </h6>
+        {% endif %}
         {% if user == post.author %}
             <a class="btn btn-outline-warning m-3" href="{% url 'update' post.pk %}">ویرایش پست</a>
             <a class="btn btn-outline-danger m-3" href="{% url 'delete' post.pk %}">حذف پست</a>

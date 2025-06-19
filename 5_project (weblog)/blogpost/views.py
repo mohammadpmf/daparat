@@ -70,12 +70,21 @@ def detail(request, pk):
     comments = post.comments.filter(state=Comment.STATE_CHOICES_APPROVED)
     form = BlogPostCommentForm()
     if request.method == "POST":
-        form = BlogPostCommentForm(request.POST)
-        if form.is_valid():
-            form = form.save(commit=False)
-            form.post = post
-            form.save()
-            form = BlogPostCommentForm()
+        print(request.POST)
+        if "name" in request.POST:
+            form = BlogPostCommentForm(request.POST)
+            if form.is_valid():
+                form = form.save(commit=False)
+                form.post = post
+                form.save()
+                form = BlogPostCommentForm()
+        else:
+            print(post.likes.all())
+            if request.user in post.likes.all():
+                post.likes.remove(request.user)
+            else:
+                post.likes.add(request.user)
+        
     context = {"post": post, "comments": comments, "form": form}
     return render(request, "detail.html", context)
 
@@ -112,5 +121,37 @@ def update(request, pk):
 
 def recent_posts(request):
     posts = BlogPost.objects.all().order_by("-datetime_modified")[:5]
+    context = {"posts": posts}
+    return render(request, "index.html", context)
+
+
+@login_required
+def favorites(request):
+    user = request.user
+    posts_list = user.blogpost_likes.all().order_by("-datetime_modified")
+    paginator = Paginator(posts_list, 10)
+    page = request.GET.get('page')
+    try:
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    except EmptyPage:
+        posts = paginator.page(paginator.num_pages)
+    context = {"posts": posts}
+    return render(request, "index.html", context)
+
+
+@login_required
+def my_posts(request):
+    user = request.user
+    posts_list = user.blogposts.all().order_by("-datetime_modified")
+    paginator = Paginator(posts_list, 10)
+    page = request.GET.get('page')
+    try:
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    except EmptyPage:
+        posts = paginator.page(paginator.num_pages)
     context = {"posts": posts}
     return render(request, "index.html", context)

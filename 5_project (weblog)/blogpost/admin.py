@@ -9,16 +9,15 @@ class BlogPostAdmin(admin.ModelAdmin):
         "title",
         "datetime_created",
         "datetime_modified",
-        "likes",
         "author",
     ]
     list_display_links = [
         "title",
         "datetime_created",
         "datetime_modified",
-        "likes",
         "author",
     ]
+    filter_horizontal = ["likes"]
 
 
 @admin.register(Comment)

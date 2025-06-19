@@ -13,7 +13,8 @@
             <p>{{ post.description|truncatechars:200 }}<a href="{{ post.get_absolute_url }}" class="text-decoration-none text-info"><span>مطالعه بیشتر</span></a></p>
             <hr>
             <h6 class="text-muted small">نویسنده: {{ post.author }}</h6>
-            <h6 class="text-muted small">🧡{{ post.likes }}</h6>
+            {% comment %} <h6 class="text-muted small">🧡 {{ post.likes.all.count }}</h6> {% endcomment %}
+            <h6 class="text-muted small">🧡 {{ post.likes.all|length }}</h6>
         </div>
     {% endfor %}
     <nav aria-label="Page navigation">

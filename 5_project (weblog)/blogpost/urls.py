@@ -9,4 +9,6 @@ urlpatterns = [
     path("recent_posts/", views.recent_posts, name="recent_posts"),
     path("delete/<int:pk>/", views.delete, name="delete"),
     path("update/<int:pk>/", views.update, name="update"),
+    path("favorites/", views.favorites, name="favorites"),
+    path("my_posts/", views.my_posts, name="my_posts"),
 ]
