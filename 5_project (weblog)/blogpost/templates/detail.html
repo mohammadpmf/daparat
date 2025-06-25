@@ -1,6 +1,9 @@
 {% extends "_base.html" %}
 
 {% load crispy_forms_tags %}
+{% load madval_persian_translation %}
+
+{% load jformat %}
 
 {% block title %}جزییات پست {{ post.title }} {% endblock title %}
 
@@ -9,11 +12,15 @@
     <div class="container mt-5 p-4 shadow-lg">
         <h1><a href="#" class="text-decoration-none text-info">{{ post.title }}</a></h1>
         <hr>
+        {% if post.picture %}
+            <img src="{{ post.picture.url }}" alt="a picture">
+            <hr>
+        {% endif %}
         <p>{{ post.description }}</p>
         <hr>
         <h6 class="text-muted small">نویسنده: {{ post.author }}</h6>
-        <h6 class="text-muted small">تاریخ ایجاد: {{ post.datetime_created }}</h6>
-        <h6 class="text-muted small">تاریخ آخرین ویرایش:  {{ post.datetime_modified }}</h6>
+        <h6 class="text-muted small">تاریخ ایجاد: {{ post.datetime_created|jformat:"%Y/%m/%d - %H:%M"|pn }}</h6>
+        <h6 class="text-muted small">تاریخ آخرین ویرایش:  {{ post.datetime_modified|jformat:"%Y/%m/%d - %H:%M"|pn }}</h6>
         {% if user.is_authenticated %}
             <form action="" method="post">
                 {% csrf_token %}

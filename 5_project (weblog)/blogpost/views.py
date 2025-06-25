@@ -1,9 +1,10 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from .models import BlogPost, Comment
 from .forms import BlogPostCommentForm
+from .decorators import post_owner_required
 
 
 def home(request):
@@ -26,13 +27,16 @@ def add(request):
         user = request.user
         title = request.POST.get("title")
         description = request.POST.get("description")
+        picture = request.FILES.get("picture")
         p = BlogPost.objects.create(
             title=title,
             description=description,
             author=user,
+            picture=picture,
         )
         return redirect(p.get_absolute_url())
-    return render(request, "add.html")
+    context = {"page_name": "add"}
+    return render(request, "add.html", context)
 
 
 def detail(request, pk):
@@ -95,27 +99,31 @@ def test_func(user, *args, **kwargs):
     return user==post.author
 
 
-@user_passes_test(test_func)
+@post_owner_required
 def delete(request, pk):
     post = get_object_or_404(BlogPost, pk=pk)
     if request.method=="POST":
-        post.delete()
-        return redirect("home")
+        if request.user == post.author:
+            post.delete()
+            return redirect("home")
     context = {"post": post}
     return render(request, "delete.html", context)
 
 
-@user_passes_test(test_func)
+@post_owner_required
 def update(request, pk):
     post = get_object_or_404(BlogPost, pk=pk)
     if request.method=="POST":
-        title = request.POST.get("title")
-        description = request.POST.get("description")
-        post.title = title
-        post.description = description
-        post.save()
-        return redirect(post.get_absolute_url())
-    context = {"post": post}
+        if request.user == post.author:
+            title = request.POST.get("title")
+            description = request.POST.get("description")
+            picture = request.FILES.get("picture")
+            post.title = title
+            post.description = description
+            post.picture = picture
+            post.save()
+            return redirect(post.get_absolute_url())
+    context = {"post": post, "page_name": "update"}
     return render(request, "add.html", context)
 
 

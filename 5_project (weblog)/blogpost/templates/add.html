@@ -1,11 +1,18 @@
 {% extends "_base.html" %}
 
-{% block title %}اضافه کردن پست جدید{% endblock title %}
+{% block title %}
+{% if page_name == 'add' %}
+    اضافه کردن پست جدید
+{% elif page_name == 'update' %}
+    ویرایش کردن پست {{ post.title }}
+{% endif %}
+{% endblock title %}
+
 
 {% block content %}
 <div class="col-8 mx-3">
     <div class="container mt-5 p-4 shadow-lg">
-        <form action="" method="post">
+        <form action="" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="form-row">
                 <div class="form-group col-md-5">
@@ -17,7 +24,17 @@
                     <textarea rows="10" class="form-control" id="description" name="description" placeholder="توضیحات"
                         required>{{ post.description }}</textarea>
                 </div>
-                <button type="submit" class="btn btn-outline-success mt-4 me-4">ذخیره پست</button>
+                <div class="form-group col-md-5">
+                    <label for="picture">عکس (اختیاری)</label>
+                    <input class="form-control" type="file" name="picture">
+                </div>
+                <button type="submit" class="btn btn-outline-success mt-4 me-4">
+                    {% if page_name == 'add' %}
+                        ذخیره پست
+                    {% elif page_name == 'update' %}
+                        ویرایش کردن پست
+                    {% endif %}
+                </button>
             </div>
         </form>
     </div>

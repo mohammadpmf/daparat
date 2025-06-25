@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     #  third party apps
     "crispy_forms",
     "crispy_bootstrap5",
+    "django_jalali",
+    "django_madval",
 
     #  my apps
     "accounts",
@@ -148,3 +150,9 @@ EMAIL_HOST_PASSWORD = "your_app_password_here"
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 ########################     END CRISPY FORMS     ########################
+
+
+########################     MEDIA FILES     ########################
+MEDIA_URL = '/media/'
+MEDIA_ROOT = str(BASE_DIR.joinpath('media'))
+########################     END MEDIA FILES     ########################
