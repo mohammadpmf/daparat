@@ -10,11 +10,14 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+import os
+from dotenv import load_dotenv
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+load_dotenv(os.path.join(BASE_DIR, '.env'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -93,11 +96,11 @@ WSGI_APPLICATION = "weblog.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": "weblog_db_for_aparat",
-        "USER": "root",
-        "PASSWORD": "root",
-        "HOST": "127.0.0.1",
-        "PORT": "3306",
+        "NAME": os.environ.get("MYSQL_DB_NAME", "weblog_db_for_aparat"),
+        "USER": os.environ.get("MYSQL_USERNAME", "root"),
+        "PASSWORD": os.environ.get("MYSQL_PASSWORD", "root"),
+        "HOST": os.environ.get("MYSQL_HOST", "127.0.0.1"),
+        "PORT": os.environ.get("MYSQL_PORT", "3306")
     }
 }
 
@@ -163,10 +166,9 @@ EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 465
 EMAIL_USE_SSL = True
-EMAIL_HOST_USER = "shookooljooni254@gmail.com"
-EMAIL_HOST_PASSWORD = "your_app_password_here"
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", "shookooljooni254@gmail.com")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 ########################     END EMAIL     ########################
-
 
 ########################     CRISPY FORMS         ########################
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
