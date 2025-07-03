@@ -74,16 +74,15 @@ def detail(request, pk):
     comments = post.comments.filter(state=Comment.STATE_CHOICES_APPROVED)
     form = BlogPostCommentForm()
     if request.method == "POST":
-        print(request.POST)
-        if "name" in request.POST:
+        action = request.POST.get("action")
+        if action=="comment":
             form = BlogPostCommentForm(request.POST)
             if form.is_valid():
                 form = form.save(commit=False)
                 form.post = post
                 form.save()
                 form = BlogPostCommentForm()
-        else:
-            print(post.likes.all())
+        elif action=="like":
             if request.user in post.likes.all():
                 post.likes.remove(request.user)
             else:

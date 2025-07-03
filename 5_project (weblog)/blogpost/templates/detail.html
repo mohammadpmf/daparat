@@ -26,9 +26,9 @@
                 {% csrf_token %}
                 <h6 class="text-muted small">
                     {% if user in post.likes.all %}
-                        <button class="btn btn-success" type="submit">
+                        <button class="btn btn-success" type="submit" name="action" value="like">
                     {% else %}
-                        <button class="btn btn-outline-success" type="submit">
+                        <button class="btn btn-outline-success" type="submit" name="action" value="like">
                     {% endif %}
                         🧡 {{ post.likes.all.count }}
                     </button>
@@ -65,7 +65,7 @@
             <table>
                 {{ form|crispy }}
             </table>
-            <button type="submit" class="btn btn-outline-success mt-4 me-4">ارسال نظر</button>
+            <button type="submit" class="btn btn-outline-success mt-4 me-4" name="action" value="comment">ارسال نظر</button>
         </form>
     </div>
 </div>
