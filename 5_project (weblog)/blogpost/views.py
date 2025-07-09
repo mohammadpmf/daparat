@@ -1,29 +1,54 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.decorators import login_required
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.shortcuts import redirect
+from django.urls import reverse_lazy
+from django.views import generic
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 from .models import BlogPost, Comment
 from .forms import BlogPostCommentForm
-from .decorators import post_owner_required
 
 
-def home(request):
-    posts_list = BlogPost.objects.all().order_by("-datetime_modified")
-    paginator = Paginator(posts_list, 10)
-    page = request.GET.get('page')
-    try:
-        posts = paginator.page(page)
-    except PageNotAnInteger:
-        posts = paginator.page(1)
-    except EmptyPage:
-        posts = paginator.page(paginator.num_pages)
-    context = {"posts": posts}
-    return render(request, "index.html", context)
+class BaseListView(generic.ListView):
+    model = BlogPost
+    template_name = "index.html"
+    context_object_name = "posts"
+    paginate_by = 10
+    queryset = BlogPost.objects.all().order_by("-datetime_modified")
 
 
-@login_required
-def add(request):
-    if request.method == "POST":
+class Home(BaseListView):
+    pass
+
+
+class RecentPosts(BaseListView):
+    def get_queryset(self):
+        return self.queryset[:5]
+        return super().get_queryset()[:5]
+
+
+class Favorites(LoginRequiredMixin, BaseListView):
+    def get_queryset(self):
+        user = self.request.user
+        return user.blogpost_likes.all().order_by("-datetime_modified")
+
+
+class MyPosts(LoginRequiredMixin, BaseListView):
+    def get_queryset(self):
+        user = self.request.user
+        return user.blogposts.all().order_by("-datetime_modified")
+
+
+class Add(LoginRequiredMixin, generic.CreateView):
+    model = BlogPost
+    template_name = "add.html"
+    context_object_name = "post"
+    fields = ["title", "description", "picture"]
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_name"] = "add"
+        return context
+
+    def post(self, request, *args, **kwargs):
         user = request.user
         title = request.POST.get("title")
         description = request.POST.get("description")
@@ -35,130 +60,74 @@ def add(request):
             picture=picture,
         )
         return redirect(p.get_absolute_url())
-    context = {"page_name": "add"}
-    return render(request, "add.html", context)
 
 
-def detail(request, pk):
-    # post = BlogPost.objects.get(pk=pk)
-    post = get_object_or_404(BlogPost, pk=pk)
-    comments = Comment.objects.filter(post=post)
-    if request.method == "POST":
-        name = request.POST.get("name")
-        email = request.POST.get("email", None)
-        address = request.POST.get("address", "")
-        city = request.POST.get("city", "")
-        province = request.POST.get("province", "")
-        zip_code = request.POST.get("zip_code", "")
-        hide_name = request.POST.get("hide_name")
-        hide_name = True if hide_name else False
-        comment = request.POST.get("comment")
-        Comment.objects.create(
-            name=name,
-            email=email,
-            address=address,
-            city=city,
-            province=province,
-            zip_code=zip_code,
-            hide_name=hide_name,
-            comment=comment,
-            post=post,
-        )
-    context = {"post": post, "comments": comments}
-    return render(request, "detail.html", context)
+class Detail(generic.DetailView):
+    model = BlogPost
+    context_object_name = "post"
+    template_name = "detail.html"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["form"] = BlogPostCommentForm()
+        post = self.get_object()
+        # context["comments"] = Comment.objects.filter(post=post, state=Comment.STATE_CHOICES_APPROVED)
+        context["comments"] = post.comments.filter(state=Comment.STATE_CHOICES_APPROVED)
+        return context
 
-def detail(request, pk):
-    post = get_object_or_404(BlogPost, pk=pk)
-    # comments = Comment.objects.filter(post=post, state=Comment.STATE_CHOICES_APPROVED)
-    comments = post.comments.filter(state=Comment.STATE_CHOICES_APPROVED)
-    form = BlogPostCommentForm()
-    if request.method == "POST":
+    def post(self, request, *args, **kwargs):
         action = request.POST.get("action")
-        if action=="comment":
+        post = self.get_object()
+        if action == "comment":
             form = BlogPostCommentForm(request.POST)
             if form.is_valid():
                 form = form.save(commit=False)
                 form.post = post
                 form.save()
                 form = BlogPostCommentForm()
-        elif action=="like":
+        elif action == "like":
             if request.user in post.likes.all():
                 post.likes.remove(request.user)
             else:
                 post.likes.add(request.user)
-        
-    context = {"post": post, "comments": comments, "form": form}
-    return render(request, "detail.html", context)
+        return super().get(request, *args, **kwargs)
 
 
-def test_func(user, *args, **kwargs):
-    pk = kwargs.get("pk")
-    post = get_object_or_404(BlogPost, pk=pk)
-    return user==post.author
+class Delete(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
+    model = BlogPost
+    context_object_name = "post"
+    template_name = "delete.html"
+    success_url = reverse_lazy("home")
+
+    def test_func(self):
+        user = self.request.user
+        post = self.get_object()
+        return user == post.author
 
 
-@post_owner_required
-def delete(request, pk):
-    post = get_object_or_404(BlogPost, pk=pk)
-    if request.method=="POST":
-        if request.user == post.author:
-            post.delete()
-            return redirect("home")
-    context = {"post": post}
-    return render(request, "delete.html", context)
+class Update(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
+    model = BlogPost
+    template_name = "add.html"
+    context_object_name = "post"
+    fields = ["title", "description", "picture"]
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_name"] = "update"
+        return context
 
-@post_owner_required
-def update(request, pk):
-    post = get_object_or_404(BlogPost, pk=pk)
-    if request.method=="POST":
-        if request.user == post.author:
-            title = request.POST.get("title")
-            description = request.POST.get("description")
-            picture = request.FILES.get("picture")
-            post.title = title
-            post.description = description
-            post.picture = picture
-            post.save()
-            return redirect(post.get_absolute_url())
-    context = {"post": post, "page_name": "update"}
-    return render(request, "add.html", context)
+    def post(self, request, *args, **kwargs):
+        post = self.get_object()
+        title = request.POST.get("title")
+        description = request.POST.get("description")
+        picture = request.FILES.get("picture")
+        post.title = title
+        post.description = description
+        post.picture = picture
+        post.save()
+        return redirect(post.get_absolute_url())
 
-
-def recent_posts(request):
-    posts = BlogPost.objects.all().order_by("-datetime_modified")[:5]
-    context = {"posts": posts}
-    return render(request, "index.html", context)
-
-
-@login_required
-def favorites(request):
-    user = request.user
-    posts_list = user.blogpost_likes.all().order_by("-datetime_modified")
-    paginator = Paginator(posts_list, 10)
-    page = request.GET.get('page')
-    try:
-        posts = paginator.page(page)
-    except PageNotAnInteger:
-        posts = paginator.page(1)
-    except EmptyPage:
-        posts = paginator.page(paginator.num_pages)
-    context = {"posts": posts}
-    return render(request, "index.html", context)
-
-
-@login_required
-def my_posts(request):
-    user = request.user
-    posts_list = user.blogposts.all().order_by("-datetime_modified")
-    paginator = Paginator(posts_list, 10)
-    page = request.GET.get('page')
-    try:
-        posts = paginator.page(page)
-    except PageNotAnInteger:
-        posts = paginator.page(1)
-    except EmptyPage:
-        posts = paginator.page(paginator.num_pages)
-    context = {"posts": posts}
-    return render(request, "index.html", context)
+    def test_func(self):
+        user = self.request.user
+        post = self.get_object()
+        return user == post.author
