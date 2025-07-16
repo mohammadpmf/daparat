@@ -2,6 +2,7 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib import messages
 
 from .models import BlogPost, Comment
 from .forms import BlogPostCommentForm
@@ -85,11 +86,14 @@ class Detail(generic.DetailView):
                 form.post = post
                 form.save()
                 form = BlogPostCommentForm()
+                messages.success(request, f"نظر شما با موفقیت دریافت شد و پس از تایید مدیریت در سایت نمایش داده خواهد شد.")
         elif action == "like":
             if request.user in post.likes.all():
                 post.likes.remove(request.user)
+                messages.success(request, f"لایک پست {post.title} با موفقیت حذف شد.")
             else:
                 post.likes.add(request.user)
+                messages.success(request, f"پست {post.title} با موفقیت به لیست علاقه مندی ها اضافه شد.")
         return super().get(request, *args, **kwargs)
 
 

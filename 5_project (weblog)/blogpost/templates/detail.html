@@ -8,6 +8,11 @@
 {% block title %}جزییات پست {{ post.title }} {% endblock title %}
 
 {% block content %}
+{% for message in messages %}
+<div class="alert alert-success mt-5" role="alert">
+  {{ message }}
+</div>
+{% endfor %}
 <div class="col-8 mx-3">
     <div class="container mt-5 p-4 shadow-lg">
         <h1><a href="#" class="text-decoration-none text-info">{{ post.title }}</a></h1>
