@@ -1,0 +1,22 @@
+{% extends "_base.html" %}
+
+{% load static %}
+
+{% block title %}
+سفارش {{ food.name }}
+{% endblock title %}
+
+{% block background_image %}
+    <img class="background" src="{% static 'imgs/backgrounds/background.jpg' %}" alt="">
+{% endblock background_image %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/contact_us.css' %}">
+{% endblock css %}
+
+{% block content %}
+    <h1>{{ name }} عزیز، سفارش {{ amount }} عدد {{ food.name }} با موفقیت انجام شد</h1>
+    <h1>شماره تماس شما: {{ phone_number }}</h1>
+    <hr>
+{% endblock content %}
+    

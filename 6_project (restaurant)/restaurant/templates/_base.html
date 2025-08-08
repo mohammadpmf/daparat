@@ -1,0 +1,77 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock title %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    {% block css %}{% endblock css %}
+    <link rel="icon" type="image/x-icon" href="{% static 'imgs/logo/logo.ico' %} ">
+
+</head>
+<body>
+    {% block background_image %}{% endblock background_image %}
+    <h1 class="title">به رستوران فلاح خوش آمدید</h1>
+    <hr>
+    <nav>
+        <ul>
+            <li><a href="{% url 'home' %}">خانه</a></li>
+            <li><a href="{% url 'breakfast' %}">منوی صبحانه</a></li>
+            <li><a href="{% url 'lunch' %}">منوی ناهار</a></li>
+            <li><a href="{% url 'dinner' %}">منوی شام</a></li>
+            <li><a href="{% url 'fast_food' %}">منوی فست فود</a></li>
+            <li><a href="{% url 'persian' %}">منوی غذای ایرانی</a></li>
+            <li><a href="{% url 'drinks' %}">نوشیدنی</a></li>
+            <div>
+                <li><a href="{% url 'about_us' %}">درباره ما</a></li>
+                <li><a href="{% url 'contact_us' %}">تماس با ما</a></li>
+            </div>
+        </ul>
+    </nav>
+    {% if form.errors %}
+        {% for field, errors in form.errors.items %}
+            {% for error in errors %}
+                <h1>{{ error }}</h1>
+            {% endfor %}
+        {% endfor %}
+    {% endif %}
+    {% if messages %}
+    {% for message in messages %}
+    <p>{{message}}</p>
+    {% endfor %}
+    {% endif %}
+    {% block content %}{% endblock content %}
+    <hr>
+    <h2>رستوران فلاح</h2>
+    <footer>
+        <div class="right">
+            <h3>لیست همکاران</h3>
+            <hr class="footer">
+            <a href="">رستوران محمود</a>
+            <a href="">رستوران زیبا</a>
+            <a href="">رستوران تیراژه</a>
+            <a href="">رستوران رفتاری</a>
+            <a href="">رستوران جهانگیر</a>
+            <a href="">رستوران کشمیری</a>
+        </div>
+        <div class="left">
+            <h3>ما را در شبکه های اجتماعی دنبال کنید</h3>
+            <hr class="footer">
+            <a href="#"><img class="footer_image" src="{% static 'imgs/soicial media/aparat.png' %}" alt=""></a>
+            <a href="#"><img class="footer_image" src="{% static 'imgs/soicial media/youtube.png' %}" alt=""></a>
+            <a href="#"><img class="footer_image" src="{% static 'imgs/soicial media/facebook.png' %}" alt=""></a>
+            <a href="#"><img class="footer_image" src="{% static 'imgs/soicial media/instagram.png' %}" alt=""></a>
+            <a href="#"><img class="footer_image" src="{% static 'imgs/soicial media/twitter.png' %}" alt=""></a>
+            <a href="#"><img class="footer_image" src="{% static 'imgs/soicial media/telegram.png' %}" alt=""></a>
+            <a href="#"><img class="footer_image" src="{% static 'imgs/soicial media/linkedin.png' %}" alt=""></a>
+            <a href="#"><img class="footer_image" src="{% static 'imgs/soicial media/whatsapp.png' %}" alt=""></a>
+        </div>
+    </footer>
+    <a class="up_arrow" href="#"><i class="fa fa-arrow-up"></i></a>
+    <hr>
+    <p class="last_p">💙Powered By: Mohammad Pourmohammadi Fallah</p>
+</body>
+</html>

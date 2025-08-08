@@ -1,0 +1,42 @@
+{% extends "_base.html" %}
+
+{% load static %}
+
+{% block title %}
+تماس با رستوران فلاح
+{% endblock title %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/contact_us.css' %}">
+{% endblock css %}
+
+{% block background_image %}
+    <img class="background" src="{% static 'imgs/backgrounds/background.jpg' %}" alt="a picture">
+{% endblock background_image %}
+
+{% block content %}
+    <div class="main">
+        <div>
+            <p>آدرس: گیلان، رشت، گلسار، تقاطع بلوار دیلمان و اصفهان، ساختمان ره پیک، طبقه چهارم، واحد شانزده، رستوران فلاح</p>
+        </div>
+        <div>
+            <p>تلفن تماس:</p>
+            <p>013-33333333</p>
+            <p>0911-1111111</p>
+        </div>
+        <div class="form">
+            <form action="" method="post">
+                {% csrf_token %}
+                <label for="name">نام: </label>
+                <input type="text" name="name" placeholder="نام خود را وارد کنید">
+                <br>
+                <label for="email">آدرس ایمیل: </label>
+                <input type="email" name="email" placeholder="ایمیل خود را وارد کنید">
+                <br>
+                <textarea name="description" placeholder="متن پیام خود را بنویسید" rows="6" cols="80" required></textarea>
+                <br>
+                <button class="submit" type="submit">ارسال</button>
+            </form>
+        </div>
+    </div>
+{% endblock content %}
