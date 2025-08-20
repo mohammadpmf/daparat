@@ -1,0 +1,21 @@
+{% load i18n %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% trans "Title" %}</title>
+</head>
+<body>
+    <h1>First Paragraph</h1>
+    <h1>پاراگراف اول</h1>
+    <h1>{% translate "First Header" %}</h1>
+    <h1>{% trans "Second Header" %}</h1>
+    <p>
+        {% blocktrans %}
+        I am Mohammad. I live ...
+        {% endblocktrans %}
+    </p>
+</body>
+</html>
