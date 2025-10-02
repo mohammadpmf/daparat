@@ -4,6 +4,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 
 class GenreMovie(models.Model):
     title = models.CharField(max_length=64)
+    # movies
 
     def __str__(self):
         return self.title
@@ -14,6 +15,7 @@ class Artist(models.Model):
     last_name = models.CharField(max_length=256)
     nick_name = models.CharField(max_length=256, blank=True)
     birth_date = models.DateField(blank=True, null=True)
+    # movies
 
     def __str__(self):
         if self.nick_name != "":
@@ -41,6 +43,7 @@ class Movie(models.Model):
     rating = models.DecimalField(max_digits=3, decimal_places=1, blank=True, null=True)
     genre = models.ManyToManyField(to=GenreMovie, blank=True, related_name="movies")
     cast = models.ManyToManyField(to=Artist, blank=True, related_name="movies")
+    # comments
 
     def __str__(self):
         return f"{self.title} ({self.year})"

@@ -1,0 +1,24 @@
+1- Get all movie genres.
+2- Get all post production movies
+3- Get all avengers movies
+4- Get all action movies
+5- Get artists which their first name is benedict
+6- Get artists which their first name includes robert
+7- Get full name of all artists which have birth_date
+8- Get all movies which were released after year 2010
+9- Get all comments of avengers movies
+10- Get all movies which were released in year 2003, 2005, 2007 and 2009
+11- Get all movies which were released in year 2003, 2005, 2007 ... 2025
+12- Get artists which born between 1960 and 1970
+13- Get all movies of all artists which their first name includes robert
+14- Get all movies of benedict cumberbatch with rating greater than or equal to 9
+15- Get all movies of all artists which their first name is benedict
+16- Get all movies of all artists which their first name is benedict without duplicated movies.
+17- Get all comments of avengers movies which were released in years 2018-2020 and show the title of these movies.
+18- Get all comments of avengers movies which were released in years 2018-2020 and show the full_name of those movies artists.
+19- Get all movies which in their comments the word "tom holland" is written
+20- Get full name of all artists which have birth_date and nick_name
+21- Get all movies which were released after year 2010 or robert played
+22- Get all movies which exactly have 4 artists
+23- Get all movies which have at most 3 artists
+24- Get all comments of movies which has at least 5 artists and their release date is after 2010 and has a rating greater than 9 and has action genre and in their comment character d is used

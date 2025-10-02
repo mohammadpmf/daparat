@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1 style="text-align: center;">Welcome</h1>
+    {% comment %} {{ queryset }} {% endcomment %}
+        {% for comment in queryset %}
+    <p>{{ comment }} </p>
+    {% endfor %}
+    {% comment %} {% for comment in queryset %}
+    <p>{{ comment }} for movie {{ comment.movie.title }}</p>
+    <p>list of actors:</p>
+    {% for actor in comment.movie.cast.all %}
+    {{ actor.first_name }} {{ actor.last_name }}
+    {% endfor %}
+    {% endfor %} {% endcomment %}
+</body>
+</html>

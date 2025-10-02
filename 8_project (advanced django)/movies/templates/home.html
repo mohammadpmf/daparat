@@ -7,5 +7,29 @@
 </head>
 <body>
     <h1 style="text-align: center;">Welcome</h1>
+    {% comment %} {% for comment in comments %}
+        <p>{{ comment.user }} said: {{ comment.text }} for the movie {{ comment.movie }}</p>
+        <p>The cast of movie are:</p>
+        {% for actor in comment.movie.cast.all %}
+        <p>{{ actor.first_name }} {{ actor.last_name }}</p>
+        {% endfor %}
+    {% endfor %} {% endcomment %}
+    {% for movie in movies %}
+    <hr>
+    <h1> {{ movie.title }} {{ movie.year }}</h1>
+    <hr>
+    <h1>Genres:</h1>
+    {% for genre in movie.genre.all  %}
+    <p>{{ genre }}</p>
+    {% endfor %}
+    <h1>Cast:</h1>
+    {% for actor in movie.cast.all %}
+    <p>{{ actor.first_name }} {{ actor.last_name }}</p>
+    {% endfor %}
+    <h1>Comments:</h1>
+    {% for comment in movie.comments.all  %}
+    <p>{{ comment }}</p>
+    {% endfor %}
+    {% endfor %}
 </body>
 </html>
