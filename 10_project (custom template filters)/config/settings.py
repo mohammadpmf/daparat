@@ -25,7 +25,16 @@ SECRET_KEY = "django-insecure-u&!wtf7e^i_^=w0cx_7#d@$nvbiy1d=$(@f8mhgw65!l2n$5vw
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "127.0.0.1",
+    ".ngrok-free.app",
+    "laine-monanthous-loopily.ngrok-free.dev",
+    "caspiantek.ir",
+    "www.caspiantek.ir",
+    "178.239.147.101",
+    "drdjango.ir",
+    "www.drdjango.ir",
+]
 
 
 # Application definition
@@ -122,3 +131,13 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://*.ngrok-free.app",
+    "https://laine-monanthous-loopily.ngrok-free.dev",
+    "https://codefather1369.ir",
+    "https://www.codefather1369.ir",
+    "https://caspiantek.ir",
+    "https://www.caspiantek.ir",
+]
