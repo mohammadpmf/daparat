@@ -28,6 +28,23 @@ class BlogPost(models.Model):
 #         unique_together = ("post", "user")
 
 
+class ApprovedCommentManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(state=Comment.STATE_CHOICES_APPROVED)
+
+
+class CommentManager(models.Manager):
+    def get_approved_comments(self):
+        return self.get_queryset().filter(state=Comment.STATE_CHOICES_APPROVED)
+
+    def get_rejected_comments(self):
+        return self.get_queryset().filter(state=Comment.STATE_CHOICES_REJECTED)
+
+    def get_pending_comments(self):
+        return self.get_queryset().filter(state=Comment.STATE_CHOICES_PENDING)
+        
+
+
 class Comment(models.Model):
     STATE_CHOICES_APPROVED = "a"
     STATE_CHOICES_REJECTED = "r"
@@ -49,3 +66,6 @@ class Comment(models.Model):
     datetime_created = models.DateTimeField(auto_now_add=True, verbose_name="زمان ایجاد")
     datetime_modified = models.DateTimeField(auto_now=True, verbose_name="زمان آخرین ویرایش")
     state = models.CharField(max_length=1, choices=STATE_CHOICES, default=STATE_CHOICES_PENDING, verbose_name="وضعیت کامنت")
+
+    objects = models.Manager()
+    my_objects = CommentManager()

@@ -72,8 +72,9 @@ class Detail(generic.DetailView):
         context = super().get_context_data(**kwargs)
         context["form"] = BlogPostCommentForm()
         post = self.get_object()
+        context["comments"] = Comment.my_objects.get_approved_comments().filter(post=post)
         # context["comments"] = Comment.objects.filter(post=post, state=Comment.STATE_CHOICES_APPROVED)
-        context["comments"] = post.comments.filter(state=Comment.STATE_CHOICES_APPROVED)
+        # context["comments"] = post.comments.filter(state=Comment.STATE_CHOICES_APPROVED)
         return context
 
     def post(self, request, *args, **kwargs):
